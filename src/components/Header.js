@@ -7,6 +7,7 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
 const Header = () => {
+  const { data: session } = useSession()
   return (
     <header>
       {/* Top Nav */}
@@ -32,10 +33,13 @@ const Header = () => {
         </div>
         {/* Right */}
         <div className="flex text-white items-center space-x-5 whitespace-nowrap m-2">
-            <div className="link" onClick={signIn}>
-                <p className="text-xs font-normal">Hello, Amit</p>
+            {session? <div className="link" onClick={signOut}>
+                <p className="text-xs font-normal">Hello, {session&&session.user.name}</p>
                 <p className="text-xm font-bold md:text-sm">Accounts & Lists</p>
-            </div>
+            </div>:
+            <div className="link" onClick={signIn}>
+                <p className="text-xm font-bold">Login</p>
+            </div>}
             <div className="link">
                 <p className="text-xs">Reurns</p>
                 <p className="text-xm font-bold md:text-sm">& Orders</p>
