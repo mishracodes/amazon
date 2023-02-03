@@ -1,10 +1,17 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { addToBasket } from '../slices/basketSlice'
+import { selectItems } from '../slices/basketSlice'
 const Product = ({id, title, price, description, category, image,rating}) => {
+    const dispatch=useDispatch()
+    const state=useSelector(selectItems)
     const [isPrime]=useState(Math.round(rating.rate)>3)
-    
+    const addtoCartHandler=()=>{
+        dispatch(addToBasket({id, title, price, category, image}))
+        
+    }
   return (
     <div className='relative flex flex-col m-5 bg-white z-30 p-10 shadow-lg'>
         <p className='absolute top-2 right-2 text-xs italic text-gray-500'>{category}</p>
@@ -24,7 +31,7 @@ const Product = ({id, title, price, description, category, image,rating}) => {
             <Image className='object-contain' src="https://m.media-amazon.com/images/G/01/support_images/GUID-7254C67F-EA22-4E64-BB79-6F45644F83BF=2=en-IN=Normal.jpg" alt="" width={60} height={12}/>
             <p className='text-xs text-gray-600'>FREE Next-Day Delivery</p>
         </div>}
-        <button className='mt-auto button'>Add to Cart</button>
+        <button onClick={addtoCartHandler} className='mt-auto button'>Add to Cart</button>
     </div>
   )
 }

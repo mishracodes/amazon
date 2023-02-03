@@ -6,8 +6,15 @@ import {
   SearchIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
+import { selectItems } from '../slices/basketSlice'
+import { useSelector } from 'react-redux'
+
 const Header = () => {
   const { data: session } = useSession()
+  const router = useRouter();
+  const state=useSelector(selectItems)
+
   return (
     <header>
       {/* Top Nav */}
@@ -15,6 +22,7 @@ const Header = () => {
         <div className="mt-2 flex items-center flex-grow sm:flex-grow-0">
           <Image
             src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
+            onClick={()=>router.push('/')}
             width={97}
             height={30}
             alt=""
@@ -44,8 +52,8 @@ const Header = () => {
                 <p className="text-xs">Reurns</p>
                 <p className="text-xm font-bold md:text-sm">& Orders</p>
             </div>
-            <div className="relative flex items-center link ">
-                <span className="absolute top-0 -right-2 md:right-5 text-xs h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold">0</span>
+            <div className="relative flex items-center link " onClick={()=>router.push('/checkout')}>
+                <span className="absolute top-0 -right-2 md:right-5 text-xs h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold">{state.totalQuantity}</span>
                 <ShoppingCartIcon className="h-8 w-8"/>
                 <p className="hidden md:inline font-bold md:text-sm mt-2">Cart</p>
                 

@@ -15,7 +15,7 @@ export default function Home(props) {
       {/* Banner */}
       <Banner />
 
-      <main className="absolute top-1/2  max-w-screen-2xlg mx-auto z-20">
+      <main className="absolute top-1/2  max-w-screen-2xl mx-auto z-20">
         {/* Product */}
         <ProductFeed products={props.products}/>
       </main>
