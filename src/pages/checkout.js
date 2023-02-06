@@ -5,9 +5,34 @@ import Product from "../components/Product";
 import { selectItems } from '../slices/basketSlice'
 import { useSelector } from 'react-redux'
 import ProductCart from "../components/ProductCart";
-
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+const stripePromise =loadStripe(process.env.stripe_public_key);
 const Checkout = () => {
-  const state=useSelector(selectItems)
+  const { data: session } = useSession()
+  const state=useSelector(selectItems);
+  const checkoutHandler=async ()=>{
+    if(!session)return;
+      const stripe =await stripePromise;
+      //cal the backend to create checkout session
+      try {
+      const checkoutSession=await axios.post('api/create-checkout-session',{
+        items:state.items,
+        email:session.user.email})
+
+      const result = await stripe.redirectToCheckout({
+        sessionId:checkoutSession.data.id
+      })
+      
+      } catch (error) {
+        console.error(error.response.data);     // NOTE - use "error.response.data` (not "error")
+      }
+
+
+
+      
+  }
 
   return (
     <div className="bg-gray-200">
@@ -28,7 +53,7 @@ const Checkout = () => {
         </div>
         <div className="m-5 shadow-md p-5 bg-white">
           <p className='text-lg'>Subtotal ({state.totalQuantity} items):   <span className="font-bold">₹ {state.totalPrice}</span></p>
-          <button className='button my-6'>Proceed to buy</button>
+          <button onClick={checkoutHandler} className={`${session?'':'cursor-not-allowed'}  button my-6`}>Proceed to buy</button>
 
         </div>
       </main>
